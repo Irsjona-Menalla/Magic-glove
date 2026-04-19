@@ -12,6 +12,7 @@ Temperature & humidity sensor (e.g., DHT11/DHT22)
 Wires, resistors, glove base
 Breadboard(unless you solder)
 Glove (thick glove )
+Button
 
 How It Works
 
@@ -39,5 +40,13 @@ AI-based interpretation of sensor data
 SIMPLE DESIGN DEMO :
 <img width="739" height="627" alt="image" src="https://github.com/user-attachments/assets/d19c3774-f55f-425f-9d97-4546976dfd45" />
 
+This is my personal project and how it looks like 
+
+<img width="497" height="628" alt="image" src="https://github.com/user-attachments/assets/56dd80aa-8912-4b13-81d3-17cf7490a9b0" />
+
+Clear picture of the wiring:
+
+<img width="548" height="740" alt="image" src="https://github.com/user-attachments/assets/51fcf056-da9d-4a48-ac62-1d8e58a2bb9c" />
+Check out the code for the spcific pins I used , but you can use any pins you want.
 
 
