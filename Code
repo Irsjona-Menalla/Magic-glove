@@ -1,0 +1,98 @@
+#include <LiquidCrystal.h>
+#include <DHT.h>
+
+// LCD
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+
+// DHT
+#define DHTPIN 7
+#define DHTTYPE DHT11
+DHT dht(DHTPIN, DHTTYPE);
+
+// Pins
+const int lm35Pin = A0;
+const int irPin = 6;
+const int buttonPin = 8;
+
+bool active = false;
+bool lastButton = HIGH;
+
+unsigned long lastPressTime = 0;
+const int debounceDelay = 200;
+
+void setup() {
+  lcd.begin(16, 2);
+  dht.begin();
+
+  pinMode(irPin, INPUT);
+  pinMode(buttonPin, INPUT_PULLUP);
+
+  lcd.setCursor(0,0);
+  lcd.print("Magic Glove");
+  delay(1500);
+  lcd.clear();
+}
+
+void loop() {
+
+  // 🔘 BUTTON (clean debounce)
+  bool current = digitalRead(buttonPin);
+
+  if (current == LOW && lastButton == HIGH && millis() - lastPressTime > debounceDelay) {
+    active = !active;
+    lastPressTime = millis();
+    lcd.clear();
+  }
+
+  lastButton = current;
+
+  // 💤 WAIT MODE
+  if (!active) {
+    lcd.setCursor(0,0);
+    lcd.print("Press Button   ");
+    lcd.setCursor(0,1);
+    lcd.print("To Start       ");
+    delay(200);
+    return;
+  }
+
+  // 🌡️ TEMP (LM35)
+  int val = analogRead(lm35Pin);
+  float temp = val * 0.488;
+
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Temp:");
+  lcd.print(temp,1);
+  lcd.print("C");
+  delay(1500);
+
+  // 💧 HUMIDITY
+  float hum = dht.readHumidity();
+
+  if (isnan(hum)) {
+    hum = 0;
+  }
+
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Humidity:");
+  lcd.setCursor(0,1);
+  lcd.print(hum,1);
+  lcd.print("%");
+  delay(1500);
+
+  // 👁️ IR SENSOR
+  int ir = digitalRead(irPin);
+
+  lcd.clear();
+  lcd.setCursor(0,0);
+
+  if (ir == LOW) {
+    lcd.print("Object Detected");
+  } else {
+    lcd.print("No Object");
+  }
+
+  delay(1500);
+}
